@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Rap Video — Step-by-Step</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/lucide-react@0.438.0/dist/lucide-react.umd.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
@@ -16,11 +20,10 @@
 </head>
 <body class="antialiased">
   <div id="root"></div>
-  <script type="module">
-    import React, { useMemo } from 'https://esm.sh/react@18';
-    import { createRoot } from 'https://esm.sh/react-dom@18/client';
-    import { motion } from 'https://esm.sh/framer-motion@10';
-    import {
+  <script type="text/babel" data-presets="react">
+    const { useMemo } = React;
+    const { createRoot } = ReactDOM;
+    const {
       Music,
       Mic,
       FileText,
@@ -38,7 +41,7 @@
       Rocket,
       Share2,
       ShieldCheck,
-    } from 'https://esm.sh/lucide-react@0.438.0';
+    } = window.LucideReact || window.lucideReact;
 
     const CopyButton = ({ text, label = "Copy" }) => (
       <button
@@ -144,12 +147,7 @@
             </div>
 
             <div className="mx-auto max-w-6xl px-4 py-14 md:py-20">
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="relative z-10"
-              >
+              <div className="relative z-10">
                 <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 border border-white/10 text-sm text-slate-200 mb-5">
                   <Wand2 className="w-4 h-4" />
                   <span>Real workflow: ChatGPT → Suno → Storyboard → Veo 3 / Midjourney → Edit</span>
@@ -165,7 +163,7 @@
                   <a href="#prompts" className="rounded-xl bg-teal-500/20 hover:bg-teal-500/30 border border-teal-300/30 text-teal-200 px-4 py-2 text-sm">Jump to Prompts</a>
                   <a href="#steps" className="rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-slate-100 px-4 py-2 text-sm">See the Steps</a>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </header>
 
