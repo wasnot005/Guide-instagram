@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Rap Video — Step-by-Step</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
@@ -16,7 +17,7 @@
 </head>
 <body class="antialiased">
   <div id="root"></div>
-  <script type="module">
+  <script type="text/babel" data-type="module" data-presets="env,react">
     import React, { useMemo } from 'https://esm.sh/react@18';
     import { createRoot } from 'https://esm.sh/react-dom@18/client';
     import { motion } from 'https://esm.sh/framer-motion@10';
