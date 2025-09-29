@@ -143,31 +143,14 @@
 
       <section id="ss-pronunciation" class="space-y-4">
         <h2 class="text-2xl font-semibold text-cyan-200">Pronunciation & power words</h2>
-        <p class="text-slate-100">Download the template, add brand-specific words, then paste them into the textarea for reference while recording.</p>
-        <div class="flex flex-wrap gap-4">
-          <a
-            href="/assets/avatar-onboarding/power_words.txt"
-            download="power_words.txt"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 rounded-md border border-cyan-500 px-4 py-2 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
-          >
-            Download power words template
-          </a>
-        </div>
-        <label for="ss-pronunciation-text" class="text-sm font-semibold text-slate-300">Example pronunciation list</label>
+        <p class="text-slate-100">Create your personalised pronunciation and power words list below to keep important terms handy while you record.</p>
+        <label for="ss-pronunciation-text" class="text-sm font-semibold text-slate-300">Your pronunciation list</label>
         <textarea
           id="ss-pronunciation-text"
           rows="5"
           class="w-full rounded-md border border-slate-700 bg-slate-900/70 p-3 text-sm text-slate-100"
-        >yourbrand
-clientname
-B2B
-onboarding
-conversion
-chaiwala
-Gurugram
-Suresh Malani</textarea>
+          placeholder="Add your brand names, jargon, and pronunciation notes here"
+        ></textarea>
       </section>
 
       <section id="ss-consent" class="space-y-4">
@@ -177,15 +160,6 @@ Suresh Malani</textarea>
           “I, [Full name], confirm that this is my voice and I give permission to SocialSEO and its service providers to create and use an AI voice clone of my voice for content creation and brand media. I confirm I have the rights to provide these recordings and understand how the generated voices will be used.”
         </blockquote>
         <p class="text-sm text-slate-300">Filename format: <code>consent_[NAME]_YYYYMMDD.mp3</code></p>
-        <a
-          href="/assets/avatar-onboarding/consent_template.txt"
-          download="consent_template.txt"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 rounded-md border border-cyan-500 px-4 py-2 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
-        >
-          Download consent template
-        </a>
       </section>
 
       <section id="ss-folder-structure" class="space-y-4">
@@ -219,15 +193,6 @@ Suresh Malani</textarea>
           <h3 class="text-lg font-semibold text-slate-200">WhatsApp micro-fix templates</h3>
           <p class="text-sm text-slate-300">Copy and personalise when requesting quick fixes.</p>
           <pre class="overflow-x-auto rounded-md border border-slate-800 bg-slate-900/80 p-4 text-sm text-slate-100"><code>Hi [Name], thanks for uploading. Quick request: can you re-record Look02 keeping hands below chest and keeping direct eye contact? Please record one continuous take and upload to 01_raw_video/look02_YYYY-MM-DD_take01.mp4. Example: https://example.com/sample-good-take</code></pre>
-          <a
-            href="/assets/avatar-onboarding/whatsapp_microfixs.txt"
-            download="whatsapp_microfixs.txt"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 rounded-md border border-cyan-500 px-4 py-2 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
-          >
-            Download micro-fix templates
-          </a>
         </div>
       </section>
 
@@ -245,49 +210,6 @@ Suresh Malani</textarea>
           <summary class="cursor-pointer text-lg font-semibold text-slate-100">ElevenLabs</summary>
           <p class="mt-2 text-sm text-slate-200">Deliver 90+ minutes of raw voice where possible and include emotional read markers in filenames (e.g., <code>pvc_part03_energy.wav</code>). Upload the consent audio alongside pronunciation references.</p>
         </details>
-      </section>
-
-      <section id="ss-downloads" class="space-y-4">
-        <h2 class="text-2xl font-semibold text-cyan-200">Downloads</h2>
-        <p class="text-slate-100">Assets are hosted on the SocialSEO CDN and force-download with filenames preserved.</p>
-        <div class="grid gap-3 sm:grid-cols-2">
-          <a
-            href="/assets/avatar-onboarding/README_upload_instructions.pdf"
-            download="README_upload_instructions.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center justify-between rounded-md border border-cyan-500 px-4 py-3 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
-          >
-            README_upload_instructions.pdf
-          </a>
-          <a
-            href="/assets/avatar-onboarding/power_words.txt"
-            download="power_words.txt"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center justify-between rounded-md border border-cyan-500 px-4 py-3 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
-          >
-            power_words.txt
-          </a>
-          <a
-            href="/assets/avatar-onboarding/consent_template.txt"
-            download="consent_template.txt"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center justify-between rounded-md border border-cyan-500 px-4 py-3 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
-          >
-            consent_template.txt
-          </a>
-          <a
-            href="/assets/avatar-onboarding/whatsapp_microfixs.txt"
-            download="whatsapp_microfixs.txt"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center justify-between rounded-md border border-cyan-500 px-4 py-3 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
-          >
-            whatsapp_microfixs.txt
-          </a>
-        </div>
       </section>
     </main>
 
@@ -382,20 +304,6 @@ Suresh Malani</textarea>
         });
 
         emitEvent('avatarguide_page_view', { page: 'avatar-guide' });
-
-        const downloadLinks = document.querySelectorAll('#ss-downloads a');
-        downloadLinks.forEach((link) => {
-          link.addEventListener('click', () => {
-            const href = link.getAttribute('href') || '';
-            if (href.includes('README')) {
-              emitEvent('avatar_download_readme', { page: 'avatar-guide', file_name: 'README_upload_instructions.pdf' });
-            } else if (href.includes('power_words')) {
-              emitEvent('avatar_powerwords_download', { page: 'avatar-guide', file_name: 'power_words.txt' });
-            } else if (href.includes('consent_template')) {
-              emitEvent('avatar_consent_download', { page: 'avatar-guide', file_name: 'consent_template.txt' });
-            }
-          });
-        });
 
         const contactCta = document.querySelector('a[href^="https://wa.me/"]');
         if (contactCta) {
