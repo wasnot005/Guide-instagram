@@ -3,720 +3,407 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Avatar Studio Onboarding</title>
+    <title>Avatar Onboarding Guide — SocialSEO (Client Upload Instructions)</title>
+    <meta
+      name="description"
+      content="Clear instructions to record and upload avatar training video & voice files. Readme, consent templates, and QA checklist included."
+    />
+    <meta property="article:modified_time" content="2025-09-29" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   </head>
-  <body class="bg-black text-white">
-    <div id="root"></div>
-    <script type="text/babel">
-      const { useState, useRef, useEffect } = React;
-
-      const GlassPanel = ({ children, className = "", style = {}, ...rest }) => {
-        const panelRef = useRef(null);
-        const [isHovering, setIsHovering] = useState(false);
-        const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
-
-        const updateMousePosition = (event) => {
-          const node = panelRef.current;
-          if (!node) return;
-
-          const rect = node.getBoundingClientRect();
-          const x = ((event.clientX - rect.left) / rect.width) * 100;
-          const y = ((event.clientY - rect.top) / rect.height) * 100;
-
-          setMousePosition({
-            x: Math.min(100, Math.max(0, x)),
-            y: Math.min(100, Math.max(0, y))
-          });
-        };
-
-        const resetMousePosition = () => {
-          setMousePosition({ x: 50, y: 50 });
-          setIsHovering(false);
-        };
-
-        return (
-          <div
-            ref={panelRef}
-            className="relative rounded-3xl transition-transform duration-500"
-            onMouseEnter={(event) => {
-              setIsHovering(true);
-              updateMousePosition(event);
-            }}
-            onMouseMove={updateMousePosition}
-            onMouseLeave={resetMousePosition}
-          >
-            <div
-              className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-90 transition-opacity duration-500"
-              style={{
-                background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(255,255,255,0.6), rgba(148,163,184,0.12) 38%, rgba(15,23,42,0) 70%), linear-gradient(135deg, rgba(59,130,246,0.35), rgba(236,72,153,0.25))`,
-                filter: `saturate(${isHovering ? 1.4 : 1.2})`,
-                opacity: isHovering ? 1 : 0.85
-              }}
-            />
-            <div
-              {...rest}
-              className={`relative overflow-hidden rounded-[inherit] border border-white/20 bg-white/10 backdrop-blur-2xl shadow-[0_22px_55px_rgba(15,23,42,0.45)] transition-all duration-500 will-change-transform p-6 md:p-10 ${className}`}
-              style={{
-                transform: isHovering ? "translateY(-4px) scale(1.01)" : "translateY(0) scale(1)",
-                background: "linear-gradient(135deg, rgba(15, 23, 42, 0.65), rgba(30, 41, 59, 0.55))",
-                boxShadow: isHovering
-                  ? "0 30px 60px -15px rgba(59, 130, 246, 0.45)"
-                  : "0 20px 45px -15px rgba(15, 23, 42, 0.55)",
-                ...style
-              }}
-            >
-              <div className="pointer-events-none absolute inset-0 rounded-[inherit] border border-white/30 mix-blend-screen opacity-60" />
-              <div className="relative z-10">{children}</div>
-            </div>
-          </div>
-        );
-      };
-
-      const DoDontCard = ({ type, title, items }) => {
-        const isDo = type === "do";
-        const color = isDo ? "text-green-400" : "text-red-400";
-        const borderColor = isDo ? "border-green-400" : "border-red-400";
-        const icon = isDo ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clipRule="evenodd"
-            />
-          </svg>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-              clipRule="evenodd"
-            />
-          </svg>
-        );
-
-        return (
-          <GlassPanel
-            className={`flex flex-col items-start space-y-3 p-4 border ${borderColor}`}
-          >
-            <div className="flex items-center space-x-2">
-              <div className={color}>{icon}</div>
-              <h3 className={`text-xl font-semibold ${color}`}>{title}</h3>
-            </div>
-            <ul className="text-sm space-y-2">
-              {items.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
-          </GlassPanel>
-        );
-      };
-
-      const ChecklistItem = ({ title, time, icon, isChecked, onToggle }) => (
-        <GlassPanel
-          onClick={onToggle}
-          className={`flex flex-col items-center space-y-2 text-center cursor-pointer transition-transform hover:scale-105 duration-200 ${
-            isChecked ? "border-green-400" : "border-white/10"
-          }`}
+  <body class="bg-slate-950 text-slate-100">
+    <header class="bg-slate-900/90 border-b border-slate-800">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-sm uppercase tracking-wide text-cyan-300">SocialSEO Avatar Studio</p>
+          <h1 class="text-3xl font-bold">Avatar Onboarding Guide</h1>
+        </div>
+        <a
+          href="https://wa.me/919315858737?text=Hi%2C%20I%20have%20a%20question%20about%20my%20AI%20avatar%20onboarding."
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-sm font-semibold text-cyan-300 hover:text-cyan-200"
         >
-          <div className="relative text-4xl text-cyan-300 mb-2">
-            {icon}
-            {isChecked && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-green-400 absolute bottom-0 right-0 transform translate-x-1/2 translate-y-1/2"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            )}
-          </div>
-          <h3 className="text-xl font-bold">{title}</h3>
-          <span className="text-sm text-white/70">{time}</span>
-        </GlassPanel>
-      );
+          Contact Support
+        </a>
+      </div>
+    </header>
 
-      const FolderChecklistItem = ({ folderName, isChecked, onToggle }) => (
-        <li
-          onClick={onToggle}
-          className={`flex items-center space-x-3 cursor-pointer p-4 rounded-lg transition-colors duration-200 ${
-            isChecked ? "bg-green-600/20 text-green-400" : "bg-white/5 hover:bg-white/10"
-          }`}
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-16">
+      <section class="space-y-4">
+        <p class="text-lg text-slate-200">
+          Follow this end-to-end checklist to capture and upload every asset required for avatar training. The content below
+          mirrors the downloadable README for consistency across vendors and Ops.
+        </p>
+        <div class="rounded-lg border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-400">
+          <p>Last updated: <time datetime="2025-09-29">29 September 2025</time></p>
+        </div>
+      </section>
+
+      <section id="ss-brief" class="space-y-6">
+        <h2 class="text-2xl font-semibold text-cyan-200">What we need from you — short (copy/paste)</h2>
+        <ul class="list-disc list-inside space-y-2 text-slate-100">
+          <li>Record 4 separate continuous takes (one wardrobe/look per take). 3–5 minutes per take.</li>
+          <li>Provide 30–180 minutes of clean voice audio for Professional Voice Cloning (30 min minimum; 60+ recommended).</li>
+          <li>Upload everything in the exact folder structure and name files using the template. Do not edit or splice takes before upload.</li>
+        </ul>
+      </section>
+
+      <section id="ss-quick-start" class="space-y-6">
+        <div class="space-y-3">
+          <h2 class="text-2xl font-semibold text-cyan-200">Quick start checklist</h2>
+          <ol class="list-decimal list-inside space-y-2 text-slate-100">
+            <li>Review wardrobe options and set up your camera, lighting, and quiet recording environment.</li>
+            <li>Record four 3–5 minute video takes (one continuous take per look) including consent and brand phrases.</li>
+            <li>Capture 30–180 minutes of voice audio in WAV or 192kbps+ MP3 plus a pronunciation list read-through.</li>
+            <li>Fill out the power words list and confirm pronunciation notes for brand terms and names.</li>
+            <li>Name files using the folder template and upload them into the correct directories.</li>
+            <li>Complete the QA checklist, confirm consent assets, and notify SocialSEO Ops via WhatsApp.</li>
+          </ol>
+        </div>
+
+        <div
+          class="rounded-lg border border-slate-800 bg-slate-900/70 p-4 space-y-4"
+          data-ss-checklist
+          aria-labelledby="quick-start-interactive-heading"
         >
-          <div
-            className={`w-6 h-6 flex-shrink-0 flex items-center justify-center rounded-full transition-colors duration-200 ${
-              isChecked ? "bg-green-400 text-black" : "bg-white/20"
-            }`}
-          >
-            {isChecked ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 text-white/50"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            )}
-          </div>
-          <span className="font-mono text-white/80">{folderName}</span>
-        </li>
-      );
+          <h3 id="quick-start-interactive-heading" class="text-lg font-semibold text-cyan-200">Interactive quick start tracker (optional)</h3>
+          <p class="text-sm text-slate-300">
+            Use these checkboxes to track progress locally. Your selections stay on this browser only. If JavaScript is disabled, this section behaves like a standard checklist.
+          </p>
+          <form class="space-y-3" aria-describedby="quick-start-interactive-heading">
+            <div class="flex items-start gap-3">
+              <input type="checkbox" id="ss-step-1" name="ss-step-1" class="mt-1 h-4 w-4" />
+              <label for="ss-step-1" class="text-sm leading-6 text-slate-100">Review wardrobe options and set up your camera, lighting, and quiet recording environment.</label>
+            </div>
+            <div class="flex items-start gap-3">
+              <input type="checkbox" id="ss-step-2" name="ss-step-2" class="mt-1 h-4 w-4" />
+              <label for="ss-step-2" class="text-sm leading-6 text-slate-100">Record four 3–5 minute video takes (one continuous take per look) including consent and brand phrases.</label>
+            </div>
+            <div class="flex items-start gap-3">
+              <input type="checkbox" id="ss-step-3" name="ss-step-3" class="mt-1 h-4 w-4" />
+              <label for="ss-step-3" class="text-sm leading-6 text-slate-100">Capture 30–180 minutes of voice audio in WAV or 192kbps+ MP3 plus a pronunciation list read-through.</label>
+            </div>
+            <div class="flex items-start gap-3">
+              <input type="checkbox" id="ss-step-4" name="ss-step-4" class="mt-1 h-4 w-4" />
+              <label for="ss-step-4" class="text-sm leading-6 text-slate-100">Fill out the power words list and confirm pronunciation notes for brand terms and names.</label>
+            </div>
+            <div class="flex items-start gap-3">
+              <input type="checkbox" id="ss-step-5" name="ss-step-5" class="mt-1 h-4 w-4" />
+              <label for="ss-step-5" class="text-sm leading-6 text-slate-100">Name files using the folder template and upload them into the correct directories.</label>
+            </div>
+            <div class="flex items-start gap-3">
+              <input type="checkbox" id="ss-step-6" name="ss-step-6" class="mt-1 h-4 w-4" />
+              <label for="ss-step-6" class="text-sm leading-6 text-slate-100">Complete the QA checklist, confirm consent assets, and notify SocialSEO Ops via WhatsApp.</label>
+            </div>
+            <button type="button" class="w-full rounded-md bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-900 disabled:cursor-not-allowed disabled:bg-slate-700" disabled>Mark complete</button>
+            <div class="hidden rounded-md border border-green-500/80 bg-green-500/10 px-4 py-3 text-sm text-green-300" role="status"></div>
+          </form>
+        </div>
+      </section>
 
-      const Chatbot = ({ setIsOpen }) => {
-        const [messages, setMessages] = useState([
-          {
-            sender: "bot",
-            text: "Hello! I am your AI assistant for this onboarding page. How can I help you today?"
+      <section id="ss-video-rules" class="space-y-4">
+        <h2 class="text-2xl font-semibold text-cyan-200">Video recording rules</h2>
+        <div class="space-y-3 text-slate-100">
+          <h3 class="text-lg font-semibold text-slate-200">Camera & framing</h3>
+          <ul class="list-disc list-inside space-y-2">
+            <li>Use 4K or 1080p, 25/30 fps progressive. Mount the camera at eye level and keep the lens centred.</li>
+            <li>Frame head and shoulders with 3–4 fingers of headroom. Keep both ears visible and maintain eye contact with the lens.</li>
+            <li>Stabilise the camera on a tripod or solid surface. No handheld motion or auto-zoom.</li>
+          </ul>
+          <h3 class="text-lg font-semibold text-slate-200">Gestures & delivery</h3>
+          <ul class="list-disc list-inside space-y-2">
+            <li>Keep gestures natural and below the chest line. Avoid touching your face or covering your mouth.</li>
+            <li>Speak clearly, smile occasionally, and include your full name and brand keywords in each take.</li>
+            <li>Hold a steady posture. Do not cut between takes; provide single continuous files per look.</li>
+          </ul>
+          <h3 class="text-lg font-semibold text-slate-200">Lighting & wardrobe</h3>
+          <ul class="list-disc list-inside space-y-2">
+            <li>Use soft, even, front-biased lighting. Eliminate strong shadows, flicker, and mixed colour temperatures.</li>
+            <li>Wear four different mid-tone outfits. Avoid chroma clash (no green for greenscreen), tight stripes, or reflective jewellery.</li>
+            <li>Keep background clean or greenscreen without wrinkles. Turn off ceiling fans/AC for silent ambience.</li>
+          </ul>
+          <p class="text-sm text-slate-300">Single take rule: each wardrobe look must be one uninterrupted 3–5 minute file. Do not edit, splice, or apply filters before upload.</p>
+        </div>
+      </section>
+
+      <section id="ss-voice-pvc" class="space-y-4">
+        <h2 class="text-2xl font-semibold text-cyan-200">Voice / PVC instructions</h2>
+        <div class="space-y-3 text-slate-100">
+          <p>Deliver clean vocal recordings suitable for Professional Voice Cloning (PVC). Aim for 60+ minutes; 30 minutes is the minimum acceptable duration.</p>
+          <ul class="list-disc list-inside space-y-2">
+            <li>Total duration: 30–180 minutes of natural speech recorded across multiple clips (3–10 minutes each works best).</li>
+            <li>File formats: WAV (preferred) at 44.1 kHz or 48 kHz, 16-bit or 24-bit; alternatively MP3 at 192 kbps or higher.</li>
+            <li>Capture in a quiet, untreated room with HVAC off. Maintain a consistent 15–20 cm mic distance and avoid clipping above −6 dBFS.</li>
+            <li>Include a pronunciation list read-through covering brand names, jargon, regional words, and power words.</li>
+            <li>Record 2–3 emotional variations (neutral, energetic, empathetic) plus a verification phrase: “I confirm SocialSEO may use this voice recording to create my AI voice clone.”</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="ss-pronunciation" class="space-y-4">
+        <h2 class="text-2xl font-semibold text-cyan-200">Pronunciation & power words</h2>
+        <p class="text-slate-100">Download the template, add brand-specific words, then paste them into the textarea for reference while recording.</p>
+        <div class="flex flex-wrap gap-4">
+          <a
+            href="/assets/avatar-onboarding/power_words.txt"
+            download="power_words.txt"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-md border border-cyan-500 px-4 py-2 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
+          >
+            Download power words template
+          </a>
+        </div>
+        <label for="ss-pronunciation-text" class="text-sm font-semibold text-slate-300">Example pronunciation list</label>
+        <textarea
+          id="ss-pronunciation-text"
+          rows="5"
+          class="w-full rounded-md border border-slate-700 bg-slate-900/70 p-3 text-sm text-slate-100"
+        >yourbrand
+clientname
+B2B
+onboarding
+conversion
+chaiwala
+Gurugram
+Suresh Malani</textarea>
+      </section>
+
+      <section id="ss-consent" class="space-y-4">
+        <h2 class="text-2xl font-semibold text-cyan-200">Consent & verification</h2>
+        <p class="text-slate-100">Record the consent script as audio and reference the naming convention below. Upload the consent audio file inside the <code>consent/</code> folder.</p>
+        <blockquote class="rounded-md border-l-4 border-cyan-500 bg-slate-900/70 p-4 text-sm text-slate-200">
+          “I, [Full name], confirm that this is my voice and I give permission to SocialSEO and its service providers to create and use an AI voice clone of my voice for content creation and brand media. I confirm I have the rights to provide these recordings and understand how the generated voices will be used.”
+        </blockquote>
+        <p class="text-sm text-slate-300">Filename format: <code>consent_[NAME]_YYYYMMDD.mp3</code></p>
+        <a
+          href="/assets/avatar-onboarding/consent_template.txt"
+          download="consent_template.txt"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-md border border-cyan-500 px-4 py-2 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
+        >
+          Download consent template
+        </a>
+      </section>
+
+      <section id="ss-folder-structure" class="space-y-4">
+        <h2 class="text-2xl font-semibold text-cyan-200">Folder & filename convention</h2>
+        <p class="text-slate-100">Replicate this folder tree exactly when submitting assets. Do not rename or compress folders.</p>
+        <pre class="overflow-x-auto rounded-md border border-slate-800 bg-slate-900/80 p-4 text-sm text-slate-100"><code>ClientName_AVATAR_ONBOARDING/
+├─ 01_raw_video/
+│   ├─ look01_2025-09-28_take01.mp4
+│   ├─ look02_2025-09-28_take01.mp4
+├─ 02_voice_clips_PVC/
+│   ├─ pvc_part01_2025-09-28.mp3  (30-60 mins total)
+│   ├─ pronunciation_list_read.mp3
+├─ 03_talking_heads_archive/
+├─ 04_stills_headshots/
+├─ 05_extras/
+└─ consent/
+    └─ consent_Radha_2025-09-29.mp3</code></pre>
+      </section>
+
+      <section id="ss-qa-checklist" class="space-y-4">
+        <h2 class="text-2xl font-semibold text-cyan-200">QA checklist before upload</h2>
+        <ul class="list-disc list-inside space-y-2 text-slate-100">
+          <li>All four video looks exported as single continuous takes, eye-level framing, hands below chest.</li>
+          <li>Voice bundle totals at least 30 minutes across WAV/MP3 files at required sample rate and bitrate.</li>
+          <li>Consent audio present and named <code>consent_[NAME]_YYYYMMDD.mp3</code>.</li>
+          <li>Pronunciation list (text + audio read) included in <code>02_voice_clips_PVC/</code>.</li>
+          <li>Folder structure exactly matches template with no extra ZIP layers.</li>
+          <li>WhatsApp notification sent to SocialSEO Ops with upload confirmation and link.</li>
+        </ul>
+        <div class="space-y-2">
+          <h3 class="text-lg font-semibold text-slate-200">WhatsApp micro-fix templates</h3>
+          <p class="text-sm text-slate-300">Copy and personalise when requesting quick fixes.</p>
+          <pre class="overflow-x-auto rounded-md border border-slate-800 bg-slate-900/80 p-4 text-sm text-slate-100"><code>Hi [Name], thanks for uploading. Quick request: can you re-record Look02 keeping hands below chest and keeping direct eye contact? Please record one continuous take and upload to 01_raw_video/look02_YYYY-MM-DD_take01.mp4. Example: https://example.com/sample-good-take</code></pre>
+          <a
+            href="/assets/avatar-onboarding/whatsapp_microfixs.txt"
+            download="whatsapp_microfixs.txt"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-md border border-cyan-500 px-4 py-2 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
+          >
+            Download micro-fix templates
+          </a>
+        </div>
+      </section>
+
+      <section id="ss-vendors" class="space-y-4">
+        <h2 class="text-2xl font-semibold text-cyan-200">Vendor-specific notes</h2>
+        <details class="rounded-lg border border-slate-800 bg-slate-900/70 p-4">
+          <summary class="cursor-pointer text-lg font-semibold text-slate-100">HeyGen</summary>
+          <p class="mt-2 text-sm text-slate-200">Use 4K masters when possible. HeyGen performs best with evenly lit greenscreen plates and explicit pronunciation audio. Flag any shots with jewellery or hair covering ears.</p>
+        </details>
+        <details class="rounded-lg border border-slate-800 bg-slate-900/70 p-4">
+          <summary class="cursor-pointer text-lg font-semibold text-slate-100">Runway</summary>
+          <p class="mt-2 text-sm text-slate-200">Ensure background is flat or keyed to solid colour. Provide still headshots in 4K PNG along with the talking head masters. Runway QC requires a written summary of wardrobe colours.</p>
+        </details>
+        <details class="rounded-lg border border-slate-800 bg-slate-900/70 p-4">
+          <summary class="cursor-pointer text-lg font-semibold text-slate-100">ElevenLabs</summary>
+          <p class="mt-2 text-sm text-slate-200">Deliver 90+ minutes of raw voice where possible and include emotional read markers in filenames (e.g., <code>pvc_part03_energy.wav</code>). Upload the consent audio alongside pronunciation references.</p>
+        </details>
+      </section>
+
+      <section id="ss-downloads" class="space-y-4">
+        <h2 class="text-2xl font-semibold text-cyan-200">Downloads</h2>
+        <p class="text-slate-100">Assets are hosted on the SocialSEO CDN and force-download with filenames preserved.</p>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <a
+            href="/assets/avatar-onboarding/README_upload_instructions.pdf"
+            download="README_upload_instructions.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center justify-between rounded-md border border-cyan-500 px-4 py-3 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
+          >
+            README_upload_instructions.pdf
+          </a>
+          <a
+            href="/assets/avatar-onboarding/power_words.txt"
+            download="power_words.txt"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center justify-between rounded-md border border-cyan-500 px-4 py-3 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
+          >
+            power_words.txt
+          </a>
+          <a
+            href="/assets/avatar-onboarding/consent_template.txt"
+            download="consent_template.txt"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center justify-between rounded-md border border-cyan-500 px-4 py-3 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
+          >
+            consent_template.txt
+          </a>
+          <a
+            href="/assets/avatar-onboarding/whatsapp_microfixs.txt"
+            download="whatsapp_microfixs.txt"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center justify-between rounded-md border border-cyan-500 px-4 py-3 text-sm font-semibold text-cyan-200 hover:bg-cyan-500/10"
+          >
+            whatsapp_microfixs.txt
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900/80 py-8">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 text-sm text-slate-400">
+        <p>&copy; <span id="current-year"></span> SocialSEO. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const yearEl = document.getElementById('current-year');
+        if (yearEl) {
+          yearEl.textContent = new Date().getFullYear();
+        }
+      })();
+
+      (function () {
+        const storageKeyBase = 'ss_avatar_checklist_v1_';
+        const userKey = 'anon';
+        const storageKey = storageKeyBase + userKey;
+        const checklistContainer = document.querySelector('[data-ss-checklist]');
+        if (!checklistContainer) return;
+
+        const form = checklistContainer.querySelector('form');
+        const checkboxes = Array.from(form.querySelectorAll('input[type="checkbox"]'));
+        const completeButton = form.querySelector('button[type="button"]');
+        const statusMessage = form.querySelector('[role="status"]');
+
+        const emitEvent = (eventName, detail = {}) => {
+          if (window.dataLayer && Array.isArray(window.dataLayer)) {
+            window.dataLayer.push({ event: eventName, ...detail });
+          } else if (typeof window.gtag === 'function') {
+            window.gtag('event', eventName, detail);
+          } else {
+            console.log('analytics event', eventName, detail);
           }
-        ]);
-        const [input, setInput] = useState("");
-        const [isTyping, setIsTyping] = useState(false);
-        const messagesEndRef = useRef(null);
+        };
 
-        const systemPrompt = `You are a helpful onboarding assistant for an AI avatar creation service. Your purpose is to answer user questions about the content of this specific onboarding page, such as file formats, recording tips, or folder structure. Be concise and supportive. Do not mention API keys or technical terms not found on the page. Do not act as a traditional chatbot; simply answer questions based on the provided guide.`;
-
-        const handleSendMessage = async () => {
-          if (input.trim() === "") return;
-          const userMessage = { sender: "user", text: input };
-          setMessages((prev) => [...prev, userMessage]);
-          setInput("");
-          setIsTyping(true);
-
-          const prompt = `Based on the provided guide, answer the user's question. The question is: "${input}"`;
-
+        const savedState = (() => {
           try {
-            const response = await fetch("/api/gemini", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ prompt, systemPrompt })
-            });
-
-            const result = await response.json();
-
-            if (!response.ok) {
-              throw new Error(result?.error || "Gemini API request failed");
-            }
-
-            const botMessage = result?.text;
-
-            if (botMessage) {
-              setMessages((prev) => [...prev, { sender: "bot", text: botMessage }]);
-            } else {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  sender: "bot",
-                  text: "Sorry, I am having trouble connecting right now. Please try again later."
-                }
-              ]);
-            }
+            const raw = localStorage.getItem(storageKey);
+            return raw ? JSON.parse(raw) : {};
           } catch (error) {
-            console.error("Error fetching from Gemini API:", error);
-            setMessages((prev) => [
-              ...prev,
-              {
-                sender: "bot",
-                text:
-                  error instanceof Error && error.message
-                    ? `Sorry, I ran into an issue: ${error.message}`
-                    : "Sorry, I am having trouble connecting right now. Please try again later."
-              }
-            ]);
-          } finally {
-            setIsTyping(false);
+            console.warn('Checklist storage unavailable', error);
+            return {};
           }
-        };
+        })();
 
-        useEffect(() => {
-          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, [messages]);
-
-        return (
-          <div className="fixed bottom-20 right-6 w-full max-w-sm h-[60vh] z-[99]">
-            <GlassPanel className="h-full flex flex-col p-4">
-              <div className="flex justify-between items-center pb-4 border-b border-white/10">
-                <h3 className="font-bold text-lg">AI Assistant</h3>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="text-white/70 hover:text-white transition-colors duration-200"
-                  aria-label="Close chat"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <div className="flex-1 overflow-y-auto my-4 space-y-4">
-                {messages.map((msg, index) => (
-                  <div
-                    key={index}
-                    className={`flex ${
-                      msg.sender === "user" ? "justify-end" : "justify-start"
-                    }`}
-                  >
-                    <div
-                      className={`p-3 rounded-xl max-w-[80%] ${
-                        msg.sender === "user"
-                          ? "bg-blue-500/80 text-white"
-                          : "bg-gray-700/80 text-white"
-                      }`}
-                    >
-                      {msg.text}
-                    </div>
-                  </div>
-                ))}
-                {isTyping && (
-                  <div className="flex justify-start">
-                    <div className="p-3 rounded-xl bg-gray-700/80 text-white">...</div>
-                  </div>
-                )}
-                <div ref={messagesEndRef} />
-              </div>
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") handleSendMessage();
-                  }}
-                  className="flex-1 p-3 rounded-lg bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                  placeholder="Ask a question..."
-                  disabled={isTyping}
-                />
-                <button
-                  onClick={handleSendMessage}
-                  className="bg-cyan-500 hover:bg-cyan-600 text-white p-3 rounded-lg disabled:bg-gray-500"
-                  disabled={isTyping}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                  </svg>
-                </button>
-              </div>
-            </GlassPanel>
-          </div>
-        );
-      };
-
-      const App = () => {
-        const [checklist, setChecklist] = useState({
-          video: false,
-          voice: false,
-          consent: false,
-          brand: false,
-          pronunciation: false,
-          portraits: false
+        checkboxes.forEach((checkbox) => {
+          if (savedState[checkbox.id]) {
+            checkbox.checked = true;
+          }
         });
 
-        const [folderChecklist, setFolderChecklist] = useState({
-          consent: false,
-          videoMaster: false,
-          voiceClips: false,
-          portraits: false,
-          brandKit: false,
-          pronunciations: false
-        });
-
-        const allItemsChecked = Object.values(checklist).every(Boolean);
-        const allFoldersChecked = Object.values(folderChecklist).every(Boolean);
-
-        const toggleChecklist = (item) => {
-          setChecklist((prev) => ({ ...prev, [item]: !prev[item] }));
+        const syncState = () => {
+          const state = {};
+          checkboxes.forEach((checkbox) => {
+            state[checkbox.id] = checkbox.checked;
+          });
+          try {
+            localStorage.setItem(storageKey, JSON.stringify(state));
+          } catch (error) {
+            console.warn('Unable to persist checklist', error);
+          }
+          const allChecked = checkboxes.every((checkbox) => checkbox.checked);
+          completeButton.disabled = !allChecked;
         };
 
-        const toggleFolderChecklist = (item) => {
-          setFolderChecklist((prev) => ({ ...prev, [item]: !prev[item] }));
-        };
+        syncState();
 
-        const [isChatbotOpen, setIsChatbotOpen] = useState(false);
-
-        const scrollToChecklist = () => {
-          const target = document.getElementById("quick-start");
-          if (target) {
-            window.scrollTo({
-              top: target.offsetTop,
-              behavior: "smooth"
+        checkboxes.forEach((checkbox) => {
+          checkbox.addEventListener('change', (event) => {
+            syncState();
+            emitEvent('avatar_checklist_toggle', {
+              page: 'avatar-guide',
+              item: event.target.id,
+              checked: event.target.checked,
             });
+          });
+        });
+
+        completeButton.addEventListener('click', () => {
+          emitEvent('avatar_checklist_complete', { page: 'avatar-guide' });
+          if (statusMessage) {
+            statusMessage.classList.remove('hidden');
+            statusMessage.textContent = 'Nice! Your quick start checklist is complete on this device.';
+            setTimeout(() => {
+              statusMessage.classList.add('hidden');
+            }, 6000);
           }
-        };
+        });
 
-        return (
-          <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-red-900 text-white font-sans relative">
-            <header className="fixed top-0 left-0 right-0 z-50 p-6 flex justify-between items-center backdrop-blur-sm bg-black/10">
-              <div className="flex items-center space-x-2">
-                <span className="text-xl font-bold">Avatar Studio</span>
-              </div>
-              <a
-                href="https://wa.me/919315858737?text=Hi%2C%20I%20have%20a%20question%20about%20my%20AI%20avatar%20onboarding."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white/70 hover:text-white transition-colors"
-              >
-                Support
-              </a>
-            </header>
+        emitEvent('avatarguide_page_view', { page: 'avatar-guide' });
 
-            <button
-              onClick={() => setIsChatbotOpen((open) => !open)}
-              className="fixed bottom-6 right-6 z-[100] bg-cyan-500 hover:bg-cyan-600 text-white p-4 rounded-full shadow-lg transition-transform duration-300 transform hover:scale-110"
-              aria-label="Open chat"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                />
-              </svg>
-            </button>
+        const downloadLinks = document.querySelectorAll('#ss-downloads a');
+        downloadLinks.forEach((link) => {
+          link.addEventListener('click', () => {
+            const href = link.getAttribute('href') || '';
+            if (href.includes('README')) {
+              emitEvent('avatar_download_readme', { page: 'avatar-guide', file_name: 'README_upload_instructions.pdf' });
+            } else if (href.includes('power_words')) {
+              emitEvent('avatar_powerwords_download', { page: 'avatar-guide', file_name: 'power_words.txt' });
+            } else if (href.includes('consent_template')) {
+              emitEvent('avatar_consent_download', { page: 'avatar-guide', file_name: 'consent_template.txt' });
+            }
+          });
+        });
 
-            {isChatbotOpen && <Chatbot setIsOpen={setIsChatbotOpen} />}
-
-            <main className="relative z-10 container mx-auto px-4 md:px-8 py-20 space-y-20">
-              <section className="text-center space-y-6 pt-16">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
-                  You’re Ready. Let’s Capture Your Avatar.
-                </h1>
-                <p className="text-lg text-white/80 max-w-2xl mx-auto">
-                  This quick guide helps you record once—and get it right. Follow the steps below to submit your best-quality footage, audio, and brand assets.
-                </p>
-                <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
-                  <button
-                    onClick={scrollToChecklist}
-                    className="bg-white/10 backdrop-blur-sm border border-white/20 text-white font-bold py-3 px-8 rounded-full hover:bg-white/20 transition-colors duration-300 shadow-xl"
-                  >
-                    Start Checklist
-                  </button>
-                </div>
-              </section>
-
-              <section id="quick-start" className="space-y-6">
-                <h2 className="text-3xl font-bold text-center">Quick Start</h2>
-                <GlassPanel className="text-center">
-                  <p className="text-white/80 mb-6">
-                    You'll record: one ~5-minute talking-head video, 6–10 short natural voice clips, and two short consent statements. You'll upload: brand kit, pronunciation list, and 1–2 portraits.
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <ChecklistItem
-                      title="Talking-Head Video"
-                      time="~5 minutes"
-                      icon="🎬"
-                      isChecked={checklist.video}
-                      onToggle={() => toggleChecklist("video")}
-                    />
-                    <ChecklistItem
-                      title="Voice Clips"
-                      time="6–10 clips"
-                      icon="🎙️"
-                      isChecked={checklist.voice}
-                      onToggle={() => toggleChecklist("voice")}
-                    />
-                    <ChecklistItem
-                      title="Consent Statements"
-                      time="2 short clips"
-                      icon="📝"
-                      isChecked={checklist.consent}
-                      onToggle={() => toggleChecklist("consent")}
-                    />
-                    <ChecklistItem
-                      title="Brand Kit"
-                      time=""
-                      icon="🎨"
-                      isChecked={checklist.brand}
-                      onToggle={() => toggleChecklist("brand")}
-                    />
-                    <ChecklistItem
-                      title="Pronunciation List"
-                      time=""
-                      icon="🗣️"
-                      isChecked={checklist.pronunciation}
-                      onToggle={() => toggleChecklist("pronunciation")}
-                    />
-                    <ChecklistItem
-                      title="Portraits"
-                      time="1–2 photos"
-                      icon="📸"
-                      isChecked={checklist.portraits}
-                      onToggle={() => toggleChecklist("portraits")}
-                    />
-                  </div>
-                  {allItemsChecked && (
-                    <p className="mt-6 font-semibold text-green-400 text-2xl animate-pulse">
-                      Congratulations! You've completed the checklist.
-                    </p>
-                  )}
-                  <p
-                    className={`mt-6 font-semibold text-cyan-300 ${
-                      allItemsChecked ? "hidden" : "block"
-                    }`}
-                  >
-                    Estimated Time: 30–45 minutes
-                  </p>
-                </GlassPanel>
-              </section>
-
-              <section className="space-y-6">
-                <h2 className="text-3xl font-bold text-center">Upload &amp; Handoff</h2>
-                <GlassPanel className="text-center">
-                  <p className="text-white/80 mb-6">
-                    Use the folder structure provided to organize your files. Click on each folder to check it off as you upload your assets.
-                  </p>
-                  <ul className="space-y-3 text-left">
-                    <FolderChecklistItem
-                      folderName="00_Admin_Consent/"
-                      isChecked={folderChecklist.consent}
-                      onToggle={() => toggleFolderChecklist("consent")}
-                    />
-                    <FolderChecklistItem
-                      folderName="01_Video_Master/"
-                      isChecked={folderChecklist.videoMaster}
-                      onToggle={() => toggleFolderChecklist("videoMaster")}
-                    />
-                    <FolderChecklistItem
-                      folderName="02_Voice_Clips/"
-                      isChecked={folderChecklist.voiceClips}
-                      onToggle={() => toggleFolderChecklist("voiceClips")}
-                    />
-                    <FolderChecklistItem
-                      folderName="03_Portraits/"
-                      isChecked={folderChecklist.portraits}
-                      onToggle={() => toggleFolderChecklist("portraits")}
-                    />
-                    <FolderChecklistItem
-                      folderName="04_Brand_Kit/"
-                      isChecked={folderChecklist.brandKit}
-                      onToggle={() => toggleFolderChecklist("brandKit")}
-                    />
-                    <FolderChecklistItem
-                      folderName="05_Pronunciations/"
-                      isChecked={folderChecklist.pronunciations}
-                      onToggle={() => toggleFolderChecklist("pronunciations")}
-                    />
-                  </ul>
-                  {allFoldersChecked && (
-                    <p className="mt-6 font-semibold text-green-400 text-2xl animate-pulse">
-                      Congratulations! All your folders are ready for training.
-                    </p>
-                  )}
-                </GlassPanel>
-              </section>
-
-              <section className="space-y-6">
-                <h2 className="text-3xl font-bold text-center">Video Capture Guide</h2>
-                <GlassPanel>
-                  <p className="text-white/80 mb-6">
-                    Use a greenscreen (preferred) or your tidy usual setup. Keep the camera at eye level, frame head-and-shoulders, and light your face evenly. Record a single continuous take (~5 minutes).
-                  </p>
-                  <ul className="list-disc list-inside space-y-2 text-white/90">
-                    <li>
-                      <strong>Framing:</strong> Head-and-shoulders, eye-level; both ears visible; look into lens.
-                    </li>
-                    <li>
-                      <strong>Lighting:</strong> Soft, even, front-biased. Avoid mixed color temperatures.
-                    </li>
-                    <li>
-                      <strong>Audio:</strong> Quiet room; AC/fans off. External mic preferred.
-                    </li>
-                    <li>
-                      <strong>Wardrobe:</strong> Record 3–4 looks (mid-tones, avoid tiny patterns).
-                    </li>
-                    <li>
-                      <strong>Delivery:</strong> Speak about a favorite topic (no script). Include your full name and brand terms once.
-                    </li>
-                    <li>
-                      <strong>File naming:</strong> <code>&lt;Brand&gt;_&lt;FullName&gt;_AvatarMaster_take01.mp4</code>
-                    </li>
-                  </ul>
-                </GlassPanel>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <DoDontCard
-                    type="do"
-                    title="Do"
-                    items={[
-                      "Center yourself, keep a steady posture.",
-                      "Slight over-articulation of consonants for clearer mouth shapes."
-                    ]}
-                  />
-                  <DoDontCard
-                    type="dont"
-                    title="Don’t"
-                    items={[
-                      "Mixed color lights, heavy backlight, or flicker.",
-                      "Noisy rooms or active noise suppression that “pumps.”"
-                    ]}
-                  />
-                </div>
-              </section>
-
-              <section className="space-y-6">
-                <h2 className="text-3xl font-bold text-center">Natural Voice Guide</h2>
-                <GlassPanel>
-                  <p className="text-white/80 mb-6">
-                    Record 6–10 clips (30–60s each), in a calm environment with no music. WAV, mono, 44.1/48 kHz.
-                  </p>
-                  <ul className="list-disc list-inside space-y-2 text-white/90">
-                    <li>
-                      <strong>Content:</strong> Natural conversation about familiar topics; include your brand terms.
-                    </li>
-                    <li>
-                      <strong>Technique:</strong> Mic 15–20 cm away, slightly off-axis. Use a pop filter if available.
-                    </li>
-                    <li>
-                      <strong>Levels:</strong> Keep levels peaking around −12 to −6 dB; avoid clipping.
-                    </li>
-                    <li>
-                      <strong>File naming:</strong> <code>&lt;Brand&gt;_&lt;FullName&gt;_VoiceTrain_01.wav</code>
-                    </li>
-                  </ul>
-                </GlassPanel>
-              </section>
-
-              <section className="space-y-6">
-                <h2 className="text-3xl font-bold text-center">Consent Statements</h2>
-                <GlassPanel>
-                  <p className="text-white/80 mb-6">
-                    Record these two short consent statements clearly and simply.
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <GlassPanel className="p-4 space-y-2">
-                      <h3 className="text-xl font-bold">On-camera (video)</h3>
-                      <p className="bg-gray-800/50 p-4 rounded-lg italic border border-white/10 text-sm">
-                        "I, &lt;Full Name&gt;, consent to the capture and use of my likeness to create an AI avatar for &lt;Brand&gt; for approved brand content."
-                      </p>
-                      <p className="text-xs text-white/70">
-                        Save as: <code>&lt;Brand&gt;_&lt;FullName&gt;_Consent_Video.mp4</code>
-                      </p>
-                    </GlassPanel>
-                    <GlassPanel className="p-4 space-y-2">
-                      <h3 className="text-xl font-bold">Audio (voice)</h3>
-                      <p className="bg-gray-800/50 p-4 rounded-lg italic border border-white/10 text-sm">
-                        "I, &lt;Full Name&gt;, consent to the capture and use of my voice to create an AI voice model for &lt;Brand&gt; for approved brand content."
-                      </p>
-                      <p className="text-xs mt-2 text-white/70">
-                        Save as: <code>&lt;Brand&gt;_&lt;FullName&gt;_Consent_Audio.wav</code>
-                      </p>
-                    </GlassPanel>
-                  </div>
-                </GlassPanel>
-              </section>
-
-              <section className="space-y-6">
-                <h2 className="text-3xl font-bold text-center">Brand &amp; Pronunciation Assets</h2>
-                <GlassPanel>
-                  <ul className="list-disc list-inside space-y-3 text-white/90">
-                    <li>
-                      <strong>Brand kit:</strong> Logo (SVG/PNG), primary/secondary colors (hex), typography preferences.
-                    </li>
-                    <li>
-                      <strong>Pronunciation list:</strong> Names, places, acronyms, and special terms.
-                    </li>
-                    <li>
-                      <strong>Portraits:</strong> 1–2 high-res, front-facing images.
-                    </li>
-                  </ul>
-                </GlassPanel>
-              </section>
-
-              <section className="space-y-6">
-                <h2 className="text-3xl font-bold text-center">Support &amp; Expectations</h2>
-                <GlassPanel className="p-8">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-                    <div className="space-y-2">
-                      <div className="text-4xl text-white/80">⏳</div>
-                      <h3 className="font-bold text-lg">Turnaround</h3>
-                      <p className="text-sm text-white/70">
-                        First preview in 3–5 business days after full upload.
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="text-4xl text-white/80">✅</div>
-                      <h3 className="font-bold text-lg">Reshoot Policy</h3>
-                      <p className="text-sm text-white/70">
-                        If criteria aren’t met, we’ll request specific fixes (usually 1–2 quick pickups).
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="text-4xl text-white/80">💬</div>
-                      <h3 className="font-bold text-lg">Contact</h3>
-                      <p className="text-sm text-white/70">
-                        Need help? Message us at support@socialseo.com or start a WhatsApp chat.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-8 text-center">
-                    <a
-                      href="https://wa.me/919315858737?text=Hi%2C%20I%20have%20a%20question%20about%20my%20AI%20avatar%20onboarding."
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block bg-white/10 backdrop-blur-sm border border-white/20 text-white font-bold py-3 px-8 rounded-full hover:bg-white/20 transition-colors duration-300 shadow-xl"
-                    >
-                      Questions? Chat on WhatsApp
-                    </a>
-                  </div>
-                </GlassPanel>
-              </section>
-            </main>
-          </div>
-        );
-      };
-
-      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+        const contactCta = document.querySelector('a[href^="https://wa.me/"]');
+        if (contactCta) {
+          contactCta.addEventListener('click', () => {
+            emitEvent('contact_cta_click', { page: 'avatar-guide', medium: 'whatsapp' });
+          });
+        }
+      })();
     </script>
   </body>
 </html>
